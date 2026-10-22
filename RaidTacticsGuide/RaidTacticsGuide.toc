@@ -1,0 +1,54 @@
+## Interface: 30300
+## Title: Raid Tactics Guide
+## Notes: Beginner-friendly raid boss guides, loot viewer and visual class rotation guides for WotLK 3.3.5a.
+## Author: Raid Tactics Guide
+## Version: 1.0.0
+## SavedVariables: RaidTacticsGuideDB
+
+# --- configuration and core -------------------------------------------------
+Config.lua
+Core.lua
+
+# --- content data (edit these to change what the guide shows) ---------------
+Data\Raids.lua
+Data\Loot\Loot_ICC.lua
+Data\Loot\Loot_RS.lua
+Data\Loot\Loot_TOC.lua
+Data\Loot\Loot_ONY.lua
+Data\Loot\Loot_ULD.lua
+Data\Loot\Loot_NAXX.lua
+Data\Loot\Loot_OS.lua
+Data\Loot\Loot_EOE.lua
+Data\Loot\Loot_VOA.lua
+Data\Tactics\ICC_1.lua
+Data\Tactics\ICC_2.lua
+Data\Tactics\TOC_RS.lua
+Data\Tactics\ULD_1.lua
+Data\Tactics\ULD_2.lua
+Data\Tactics\NAXX_1.lua
+Data\Tactics\NAXX_2.lua
+Data\Tactics\Misc.lua
+Data\Classes.lua
+Data\Rotations\Warrior.lua
+Data\Rotations\Paladin.lua
+Data\Rotations\Hunter.lua
+Data\Rotations\Rogue.lua
+Data\Rotations\Priest.lua
+Data\Rotations\DeathKnight.lua
+Data\Rotations\Shaman.lua
+Data\Rotations\Mage.lua
+Data\Rotations\Warlock.lua
+Data\Rotations\Druid.lua
+
+# --- interface ---------------------------------------------------------------
+UI\Widgets.lua
+UI\TacticsView.lua
+UI\LootView.lua
+UI\RaidGuide.lua
+UI\ClassGuide.lua
+UI\Editor.lua
+UI\MainFrame.lua
+
+# --- modules -----------------------------------------------------------------
+Modules\ChatShare.lua
+Modules\Minimap.lua
