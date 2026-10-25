@@ -76,3 +76,17 @@ touch the `UI\` files.
 New files must also be listed in `RaidTacticsGuide.toc`. After editing, type `/reload`
 in game. If a file has a mistake, the addon shows a clear message on that page instead
 of breaking; `/rtg verify` lists spell ids that do not exist or do not match their name.
+
+## New Features
+
+### Raid Roll Tracker
+Manage raid loot rolls with MS, OS, and general raid roll modes. Includes countdown timers, winner detection, tie rerolls, manual confirmation, and saved roll history.
+
+Open with `/rtg rolls`.
+
+### Professions Guide
+Browse leveling guides sourced from Warmane Forums, including crafting steps and published material quantities. Use shopping lists to track collected materials, view missing amounts, and select your skill range.
+
+Quantities remain marked as unknown where the source guide does not provide them.
+
+Open with `/rtg professions`.
