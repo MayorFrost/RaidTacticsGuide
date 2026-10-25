@@ -52,7 +52,7 @@ they become part of the addon.
 ### Slash commands
 
 - `/rtg` - open/close
-- `/rtg raids`, `/rtg classes` - open a section
+- `/rtg raids`, `/rtg classes`, `/rtg professions`, `/rtg rolls` - open a section
 - `/rtg minimap` - show/hide the minimap button
 - `/rtg scale 0.9` - window size (0.6 - 1.4)
 - `/rtg reset` - reset window position and size
@@ -165,3 +165,20 @@ Enhanced's 3.3.5a data.
 
 Loot data: AtlasLoot Enhanced (3.3.5a). Boss spell ids and timings were cross-checked
 with the Warmane fork of Deadly Boss Mods.
+
+## v1.7 update (2026-10-25)
+
+- Removed Buff Tracker, its chat commands and saved settings, and unused Buff Caller/dungeon files.
+- Combined profession data into `Data/Professions.lua`, removing obsolete routes and overrides.
+- Added published reagent quantities for Alchemy, Enchanting, Engineering and First Aid.
+- Added missing Alchemy vial totals and Engineering Netherweave Cloth from the guides.
+- Enchanting shows the source's standard-rate quantities; they are not converted to 3x.
+- Custom ranges retain intersecting source brackets and label wider-bracket totals.
+- Cooking's unpublished amounts and the First Aid 365-375 gap stay clearly marked.
+- Leatherworking remains unavailable because no guide data was supplied.
+
+Only the Warmane Forum guides supplied by the addon author are used.
+Each profession records its source link and notes in `Data/Professions.lua`.
+Alchemy Stone choices add only the selected variant's materials.
+Unpublished quantities stay unknown; no other guide or database fills those gaps.
+Shopping progress tracks the displayed published amounts; yellow crafts can need extras.

@@ -12,7 +12,7 @@
 RaidTacticsGuide = RaidTacticsGuide or {}
 local RTG = RaidTacticsGuide
 
-RTG.version   = "1.0.0"
+RTG.version   = "1.7.0"
 RTG.config    = RaidTacticsGuideConfig or {}
 
 -- Registries -----------------------------------------------------------------
@@ -336,7 +336,7 @@ end
 local DB_DEFAULTS = {
     minimap   = { angle = 215, hide = false },
     window    = { scale = nil, point = nil },
-    mode      = "raids",      -- "raids" or "classes"
+    mode      = "raids",      -- raids, classes, professions or rolls
     raid      = nil,
     boss      = nil,
     tab       = nil,
@@ -348,6 +348,8 @@ local DB_DEFAULTS = {
     category  = {},           -- classKey.specKey -> category index
     overrides = {},           -- in-game edits of class guide text
     customNotes = {},         -- notes added in-game
+    raidRoll = { duration = 10, mode = "MS", manualConfirm = false, history = {} },
+    professions = { selected = "tailoring", tab = "guide", ranges = {}, collected = {} },
 }
 
 local function copyDefaults(dst, src)
@@ -367,6 +369,11 @@ function RTG:InitDB()
     end
     copyDefaults(RaidTacticsGuideDB, DB_DEFAULTS)
     self.db = RaidTacticsGuideDB
+    -- Retire removed buff pages and their saved settings.
+    self.db.buffCaller = nil
+    self.db.buffTracker = nil
+    if self.db.mode == "caller" or self.db.mode == "buffs" then self.db.mode = "raids" end
+    if self.db.mode == "dungeons" then self.db.mode = "raids" end
     -- Forget selections that point to content that no longer exists.
     if self.db.raid and not self.RaidsByKey[self.db.raid] then self.db.raid = nil end
     if self.db.boss and not self.BossesByKey[self.db.boss] then self.db.boss = nil end
@@ -474,10 +481,14 @@ local function slashHandler(input)
         RTG:Open("classes")
     elseif cmd == "raids" or cmd == "raid" then
         RTG:Open("raids")
+    elseif cmd == "professions" or cmd == "profession" or cmd == "prof" then
+        RTG:Open("professions")
+    elseif cmd == "rolls" or cmd == "roll" then
+        RTG:Open("rolls")
     else
         RTG:Print("Commands:")
         RTG:Print("  /rtg - open or close the guidebook")
-        RTG:Print("  /rtg raids | classes - open a section")
+        RTG:Print("  /rtg raids | classes | professions | rolls - open a section")
         RTG:Print("  /rtg minimap - show/hide the minimap button")
         RTG:Print("  /rtg scale <0.6-1.4> - window size")
         RTG:Print("  /rtg reset - reset window position")

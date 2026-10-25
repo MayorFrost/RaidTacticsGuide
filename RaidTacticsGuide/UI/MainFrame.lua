@@ -236,7 +236,20 @@ function RTG:CreateBody(f, L)
     local classTab = UI.CreateTab(left, "Class Guide", tabW, 24)
     classTab:SetPoint("LEFT", raidsTab, "RIGHT", 2, 0)
     classTab:SetScript("OnClick", function() RTG:SetMode("classes") end)
+    -- Raid tools share the same sidebar, textures and original window.
+    -- Keep the two original tabs and reserve the rows immediately below for tools.
+    local toolTabs = {
+        { "professions", "Professions" },
+        { "rolls", "Raid Roll Manager" },
+    }
     f.modeTabs = { raids = raidsTab, classes = classTab }
+    for i, data in ipairs(toolTabs) do
+        local tab = UI.CreateTab(left, data[2], L.leftW - 10, 24)
+        tab:SetPoint("TOPLEFT", 5, -35 - (i - 1) * 26)
+        local mode = data[1]
+        tab:SetScript("OnClick", function() RTG:SetMode(mode) end)
+        f.modeTabs[mode] = tab
+    end
 
     -- Column captions
     local function caption(parent, y)
@@ -245,10 +258,10 @@ function RTG:CreateBody(f, L)
         fs:SetJustifyH("LEFT")
         return fs
     end
-    f.leftCaption = caption(left, -36)
+    f.leftCaption = caption(left, -99)
     f.centerCaption = caption(center, -10)
 
-    f.listTop = 52     -- y offset where lists start inside the left panel
+    f.listTop = 116    -- room for original tabs and 2 tool rows
     f.centerTop = 26   -- y offset where lists start inside the centre panel
     f.bodyH = bodyH
 end

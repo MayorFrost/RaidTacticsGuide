@@ -205,10 +205,14 @@ sender:SetScript("OnUpdate", function(self, elapsed)
     end
     -- stop if we left the group while sending
     local channel = groupChannel()
-    if channel ~= channelInUse then
+    local stillValid = (channel == channelInUse)
+    if channelInUse == "RAID" or channelInUse == "RAID_WARNING" then
+        stillValid = GetNumRaidMembers() > 0
+    end
+    if not stillValid then
         wipe(queue)
         self:Hide()
-        RTG:Notify("Stopped sending tactics: you are no longer in the group.")
+        RTG:Notify("Stopped sending raid messages: you are no longer in the group.")
         if RTG.TacticsView then RTG.TacticsView:UpdateToolbar(RTG.RaidView:Boss(), true) end
         return
     end
@@ -253,4 +257,73 @@ function RTG:PreviewTactics(bossKey, mode)
     for _, m in ipairs(messages) do
         DEFAULT_CHAT_FRAME:AddMessage("|cffff7f00" .. m .. "|r")
     end
+end
+
+------------------------------------------------------------------------------
+-- Raid tool announcements (share the existing, throttled tactics queue).
+------------------------------------------------------------------------------
+
+local function warningAllowed()
+    if GetNumRaidMembers() == 0 then return false end
+    for i = 1, GetNumRaidMembers() do
+        local name, rank = GetRaidRosterInfo(i)
+        if name and UnitName("player") == name and rank and rank > 0 then
+            return true
+        end
+    end
+    return false
+end
+
+function RTG:SendRaidLines(lines, preferWarning)
+    if GetNumRaidMembers() == 0 then
+        self:Notify("You must be in a raid to make announcements.")
+        return false
+    end
+    local channel = preferWarning and warningAllowed() and "RAID_WARNING" or "RAID"
+    if #queue > 0 and channelInUse ~= channel then
+        -- The queue is sent on a single channel; preserve its ordering and type.
+        self:Notify("Wait until the previous raid announcement is sent.")
+        return false
+    end
+    local count = 0
+    for _, line in ipairs(lines or {}) do
+        if count >= 35 then break end
+        local msg = tostring(line or "")
+        -- Only the item-link format is allowed to retain WoW hyperlink pipes.
+        if msg:find("|", 1, true) then
+            local link = msg:match("|c%x%x%x%x%x%x%x%x|Hitem:[^|]+|h%[[^%]]+%]|h|r")
+                or msg:match("|Hitem:[^|]+|h%[[^%]]+%]|h")
+            if link and #link < 190 then
+                local placeholder = "RTGITEMLINKTOKEN"
+                msg = msg:gsub("|c%x%x%x%x%x%x%x%x|Hitem:[^|]+|h%[[^%]]+%]|h|r", placeholder, 1)
+                msg = msg:gsub("|Hitem:[^|]+|h%[[^%]]+%]|h", placeholder, 1)
+                msg = RTG:ToChatText(msg):gsub(placeholder, link)
+            else
+                msg = RTG:ToChatText(msg)
+            end
+        else
+            msg = RTG:ToChatText(msg)
+        end
+        if msg ~= "" then
+            if #msg > 240 then
+                -- A normal sentence may be split; a long item link falls back
+                -- to a plain cleaned line rather than emitting a broken link.
+                if msg:find("|Hitem:", 1, true) then
+                    msg = RTG:ToChatText(msg)
+                end
+                for _, part in ipairs(self:SplitChatLine(msg, 240)) do
+                    table.insert(queue, part)
+                    count = count + 1
+                end
+            else
+                table.insert(queue, msg)
+                count = count + 1
+            end
+        end
+    end
+    if count == 0 then return false end
+    channelInUse = channel
+    waited = cfg().delay or 0.7
+    sender:Show()
+    return true
 end

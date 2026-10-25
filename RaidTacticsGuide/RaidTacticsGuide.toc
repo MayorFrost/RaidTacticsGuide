@@ -1,8 +1,8 @@
 ## Interface: 30300
 ## Title: Raid Tactics Guide
-## Notes: Beginner-friendly raid boss guides, loot viewer and visual class rotation guides for WotLK 3.3.5a.
+## Notes: WotLK 3.3.5a raids, class rotations, profession recipes and material shopping tracker.
 ## Author: Raid Tactics Guide
-## Version: 1.0.0
+## Version: 1.7.0
 ## SavedVariables: RaidTacticsGuideDB
 
 # --- configuration and core -------------------------------------------------
@@ -11,6 +11,7 @@ Core.lua
 
 # --- content data (edit these to change what the guide shows) ---------------
 Data\Raids.lua
+Data\Professions.lua
 Data\Loot\Loot_ICC.lua
 Data\Loot\Loot_RS.lua
 Data\Loot\Loot_TOC.lua
@@ -47,8 +48,13 @@ UI\LootView.lua
 UI\RaidGuide.lua
 UI\ClassGuide.lua
 UI\Editor.lua
+UI\RaidTools.lua
+UI\RaidRolls.lua
+Modules\ProfessionShopping.lua
+UI\ProfessionGuide.lua
 UI\MainFrame.lua
 
 # --- modules -----------------------------------------------------------------
 Modules\ChatShare.lua
+Modules\RollManager.lua
 Modules\Minimap.lua
